@@ -41,7 +41,11 @@ class LaravelInstrumentation
                 $request = ($params[0] instanceof Request) ? $params[0] : null;
                 /** @psalm-suppress ArgumentTypeCoercion */
                 $builder = $instrumentation->tracer()
-                    ->spanBuilder(sprintf('HTTP %s', $request?->method() ?? 'unknown'))
+                    ->spanBuilder(sprintf(
+                        'HTTP %s %s',
+                        $request?->method() ?? 'unknown',
+                        $request?->path() ?? 'unknown',
+                    ))
                     ->setSpanKind(SpanKind::KIND_SERVER)
                     ->setAttribute(TraceAttributes::CODE_FUNCTION, $function)
                     ->setAttribute(TraceAttributes::CODE_NAMESPACE, $class)
